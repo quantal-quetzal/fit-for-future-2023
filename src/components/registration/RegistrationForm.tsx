@@ -1,8 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { UseFormReturn, useForm } from "react-hook-form";
+import { useMutation } from "react-query";
 import { Button } from "../ui/button";
 import { Form } from "../ui/form";
 import { Allgemein } from "./Allgemein";
@@ -11,7 +12,6 @@ import { Kampfrichter } from "./Kampfrichter";
 import { Teilnehmer } from "./Teilnehmer";
 import { Zusammenfassung } from "./Zusammenfassung";
 import { FormSchema, formSchema } from "./schema";
-import { submit } from "./submit";
 
 export type MyForm = UseFormReturn<FormSchema, any, undefined>;
 
@@ -32,29 +32,33 @@ export const RegistrationForm = () => {
         name: "",
         qualifikation: "keine",
       },
-      teilnehmer: [
-        {
-          name: "Felix Gehring",
-          geburtsjahr: 1986,
-          geschlecht: "m",
-          disziplinen: [],
-        },
-      ],
+      teilnehmer: [],
     },
     resolver: zodResolver(formSchema),
   });
 
-  const [_isPending, startTransition] = useTransition();
+  const router = useRouter();
 
-  const onSubmit = form.handleSubmit((data) => {
-    startTransition(() => {
-      submit(data);
-    });
+  const { mutateAsync: submit, isLoading } = useMutation({
+    mutationFn: async (data: FormSchema) => {
+      await fetch("/api/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+    },
   });
+
+  const onSubmit = async (values: FormSchema) => {
+    await submit(values);
+    // router.push("/success");
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={onSubmit} className="space-y-6 pb-10">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pb-10">
         <Allgemein form={form} />
         <Gebuehren form={form} />
         <Kampfrichter form={form} />
@@ -62,6 +66,7 @@ export const RegistrationForm = () => {
         <Zusammenfassung form={form} />
         <Button
           type="submit"
+          disabled={isLoading}
           className="bg-gradient-to-r from-purple-400 to-pink-600 w-full font-bold shadow-lg"
         >
           Jetzt anmelden

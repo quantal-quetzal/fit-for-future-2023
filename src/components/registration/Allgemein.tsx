@@ -22,7 +22,7 @@ export const Allgemein = ({ form }: { form: MyForm }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel>Email Adresse</FormLabel>
+              <FormLabel>E-Mail Adresse</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>

@@ -29,7 +29,7 @@ export default function RootLayout({
           <Top />
           <div className="shadow">{children}</div>
           <Bottom />
-        </ThemeProvider>
+        </ThemeProvider>{" "}
       </body>
     </html>
   );

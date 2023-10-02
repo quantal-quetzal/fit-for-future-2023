@@ -1,13 +1,52 @@
+import * as Portal from "@radix-ui/react-portal";
 import { X } from "lucide-react";
 import * as React from "react";
 
 import { Command as CommandPrimitive } from "cmdk";
+import { useEffect, useRef, useState } from "react";
 import { Badge } from "./badge";
 import { Command, CommandGroup, CommandItem } from "./command";
 
 export type ItemType = {
   value: string | number;
   label: string;
+};
+
+const DropdownPortal = ({
+  children,
+  triggerRef,
+}: {
+  children: React.ReactNode;
+  triggerRef: React.RefObject<HTMLInputElement>;
+}) => {
+  const [position, setPosition] = useState({});
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      setPosition({
+        top: rect.bottom + window.scrollY + 18,
+        left: rect.left + window.scrollX - 20,
+        width: rect.width,
+      });
+    }
+  }, [triggerRef]);
+
+  return (
+    <Portal.Portal>
+      <div
+        ref={dropdownRef}
+        style={{
+          position: "absolute",
+          ...position,
+          zIndex: 1000, // or any high value to ensure it's on top
+        }}
+      >
+        {children}
+      </div>
+    </Portal.Portal>
+  );
 };
 
 export function FancyMultiSelect<T extends ItemType>({
@@ -25,9 +64,10 @@ export function FancyMultiSelect<T extends ItemType>({
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState("");
 
-  const handleUnselect = React.useCallback((item: T) => {
+  const handleUnselect = (item: T) => {
+    console.log({ removeItem: item, selected });
     setSelected(selected.filter((s) => s.value !== item.value));
-  }, []);
+  };
 
   const handleKeyDown = React.useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -46,7 +86,7 @@ export function FancyMultiSelect<T extends ItemType>({
         }
       }
     },
-    []
+    [selected, setSelected]
   );
 
   const selectables = items.filter((item) => !selected.includes(item));
@@ -56,7 +96,7 @@ export function FancyMultiSelect<T extends ItemType>({
       onKeyDown={handleKeyDown}
       className="overflow-visible bg-transparent"
     >
-      <div className="group border border-input px-3 py-2 text-sm ring-offset-background rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+      <div className="w-full h-full group border border-input px-3 py-2 text-sm ring-offset-background rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
         <div className="flex gap-1 flex-wrap">
           {selected.map((selectedItem) => {
             return (
@@ -95,28 +135,30 @@ export function FancyMultiSelect<T extends ItemType>({
       </div>
       <div className="relative mt-2">
         {open && selectables.length > 0 ? (
-          <div className="absolute w-full z-10 top-0 rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in">
-            <CommandGroup className="h-full overflow-auto">
-              {selectables.map((selectableItem) => {
-                return (
-                  <CommandItem
-                    key={selectableItem.value}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                    onSelect={(_value) => {
-                      setInputValue("");
-                      setSelected([...selected, selectableItem]);
-                    }}
-                    className={"cursor-pointer"}
-                  >
-                    {selectableItem.label}
-                  </CommandItem>
-                );
-              })}
-            </CommandGroup>
-          </div>
+          <DropdownPortal triggerRef={inputRef}>
+            <div className="absolute z-10 top-0 rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in">
+              <CommandGroup className="h-full overflow-auto">
+                {selectables.map((selectableItem) => {
+                  return (
+                    <CommandItem
+                      key={selectableItem.value}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      onSelect={(_value) => {
+                        setInputValue("");
+                        setSelected([...selected, selectableItem]);
+                      }}
+                      className={"cursor-pointer"}
+                    >
+                      {selectableItem.label}
+                    </CommandItem>
+                  );
+                })}
+              </CommandGroup>
+            </div>
+          </DropdownPortal>
         ) : null}
       </div>
     </Command>

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
     "@hookform/resolvers": "^3.3.1",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-checkbox": "^1.0.4",
@@ -21,29 +22,36 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
+    "@sendgrid/mail": "^7.7.0",
     "@tanstack/react-table": "^8.10.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
+    "encoding": "^0.1.13",
     "lucide-react": "^0.279.0",
+    "mjml": "^4.14.1",
     "next": "latest",
     "next-themes": "^0.2.1",
+    "node-mailer": "^0.1.1",
     "react": "latest",
     "react-dom": "latest",
     "react-hook-form": "^7.46.2",
+    "react-query": "^3.39.3",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "typescript": "latest",
-    "@types/react": "latest",
+    "@types/mjml": "^4.7.2",
     "@types/node": "latest",
+    "@types/nodemailer": "^6.4.11",
+    "@types/react": "latest",
     "@types/react-dom": "latest",
     "autoprefixer": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
     "postcss": "latest",
     "tailwindcss": "latest",
-    "eslint": "latest",
-    "eslint-config-next": "latest"
+    "typescript": "latest"
   }
 }

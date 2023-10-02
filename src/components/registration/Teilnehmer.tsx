@@ -35,6 +35,11 @@ import {
   TableRow,
 } from "../ui/table";
 import { MyForm } from "./RegistrationForm";
+import {
+  disziplinByKey,
+  disziplinToMultiselectItem,
+  disziplinenByJahrgang,
+} from "./disziplinen";
 
 export const Teilnehmer = ({ form }: { form: MyForm }) => {
   const tns = form.watch("teilnehmer");
@@ -46,11 +51,11 @@ export const Teilnehmer = ({ form }: { form: MyForm }) => {
       ]);
     }
 
-    console.table(tns);
+    // console.table(tns);
   }, [form, tns]);
 
   return (
-    <Card className="p-4 space-y-6 overflow-visible">
+    <Card className="p-4 space-y-6">
       <h2 className="text-xl font-bold">Teilnehmer</h2>
       <FormField
         control={form.control}
@@ -86,6 +91,7 @@ export const Teilnehmer = ({ form }: { form: MyForm }) => {
                           <TableRow key={`tn_${index}`}>
                             <TableCell>
                               <Input
+                                className="w-44"
                                 value={tn.name}
                                 onChange={(e) =>
                                   set(index, "name", e.currentTarget.value)
@@ -97,13 +103,14 @@ export const Teilnehmer = ({ form }: { form: MyForm }) => {
                                 className="w-24"
                                 value={tn.geburtsjahr}
                                 type="number"
-                                onChange={(e) =>
+                                onChange={(e) => {
                                   set(
                                     index,
                                     "geburtsjahr",
-                                    e.currentTarget.value
-                                  )
-                                }
+                                    parseInt(e.currentTarget.value)
+                                  ),
+                                    set(index, "disziplinen", []);
+                                }}
                               />
                             </TableCell>
                             <TableCell>
@@ -126,29 +133,38 @@ export const Teilnehmer = ({ form }: { form: MyForm }) => {
                               </Select>
                             </TableCell>
                             <TableCell>
-                              <FancyMultiSelect
-                                items={[
-                                  {
-                                    value: "200mHindernis",
-                                    label: "200m Hindernis",
-                                  },
-                                  {
-                                    value: "100mHindernis",
-                                    label: "100m Hindernis",
-                                  },
-                                  {
-                                    value: "50mHindernis",
-                                    label: "50m Hindernis",
-                                  },
-                                ]}
-                                selected={[
-                                  {
-                                    value: "200mHindernis",
-                                    label: "200m Hindernis",
-                                  },
-                                ]}
-                                setSelected={() => {}}
-                              />
+                              <div className="min-w-80">
+                                <FancyMultiSelect
+                                  items={disziplinenByJahrgang(tn.geburtsjahr)
+                                    .map(disziplinToMultiselectItem)
+                                    .filter(
+                                      (val) =>
+                                        !tn.disziplinen.includes(val.value)
+                                    )}
+                                  selected={tn.disziplinen
+                                    .map(disziplinByKey)
+                                    .filter(Boolean)
+                                    .map((d) => disziplinToMultiselectItem(d!))}
+                                  setSelected={(values) => {
+                                    const seen = new Set();
+                                    const deduplicated = values.filter(
+                                      (value) => {
+                                        if (seen.has(value.value)) {
+                                          return false;
+                                        }
+                                        seen.add(value.value);
+                                        return true;
+                                      }
+                                    );
+
+                                    set(
+                                      index,
+                                      "disziplinen",
+                                      deduplicated.map((d) => d.value)
+                                    );
+                                  }}
+                                />
+                              </div>
                             </TableCell>
                             <TableCell>
                               <AlertDialog>
