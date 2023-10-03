@@ -14,7 +14,6 @@ export const sendConfirmationMail = async (data: FormSchema) => {
       pass: process.env.SENDGRID_API_KEY, // or use an API key if it's SendGrid SMTP
     },
   });
-  console.log(process.env.SENDGRID_API_KEY);
 
   // Set up email data
   const mailOptions: Mail.Options = {
