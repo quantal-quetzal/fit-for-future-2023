@@ -6,6 +6,7 @@ import { disziplinByKey } from "@/components/registration/disziplinen";
 const sheetsApi = google.sheets({ version: "v4" });
 
 const spreadsheetId = process.env.SPREADSHEET_ID;
+const templateSheetId = parseInt(process.env.TEMPLATE_SHEET_ID!);
 
 const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS_JSON!);
 
@@ -38,7 +39,7 @@ export const createDataSheetFromTemplate = async (
         {
           duplicateSheet: {
             newSheetName,
-            sourceSheetId: 0,
+            sourceSheetId: templateSheetId,
             insertSheetIndex: 999,
           },
         },
