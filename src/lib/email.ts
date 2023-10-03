@@ -75,6 +75,7 @@ const confirmationEmailHtml = (data: FormSchema) => {
   }</div></td></tr><!-- Simplifying the participant list for brevity --><tr><td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;"><div style="font-family:Inter, sans-serif;font-size:13px;line-height:22px;text-align:left;color:#000000;"><strong>${
     data.teilnehmer.length
   } Teilnehmer:</strong><br>${data.teilnehmer
+    .filter((t) => !!t.name)
     .map(
       (teilnehmer) =>
         `- ${teilnehmer.name} (${teilnehmer.geburtsjahr}, ${
