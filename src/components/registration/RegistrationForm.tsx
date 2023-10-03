@@ -60,8 +60,8 @@ export const RegistrationForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pb-10">
         <Allgemein form={form} />
-        <Gebuehren form={form} />
         <Kampfrichter form={form} />
+        <Gebuehren form={form} />
         <Teilnehmer form={form} />
         <Zusammenfassung form={form} />
         <Button
