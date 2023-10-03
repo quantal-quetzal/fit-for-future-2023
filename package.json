@@ -28,6 +28,7 @@
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
     "encoding": "^0.1.13",
+    "googleapis": "^126.0.1",
     "lucide-react": "^0.279.0",
     "mjml": "^4.14.1",
     "next": "latest",

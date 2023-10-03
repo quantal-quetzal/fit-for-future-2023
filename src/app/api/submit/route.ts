@@ -1,17 +1,20 @@
 import { formSchema } from "@/components/registration/schema";
 import { sendConfirmationMail } from "@/lib/email";
+import { createDataSheetFromTemplate } from "@/lib/sheets";
 
 export async function POST(request: Request) {
   const data = formSchema.parse(await request.json());
+
+  console.log(`${data.ortsgruppe} registered.`);
 
   console.log("Sending mail now.");
   await sendConfirmationMail(data);
 
   console.log("Successfully sent mail.");
 
-  return Response.json({ success: true });
-}
+  console.log("Creating data sheet.");
+  await createDataSheetFromTemplate(data);
+  console.log("Successfully created data sheet.");
 
-export async function GET(request: Request) {
-  return Response.json({ success: "yes" });
+  return Response.json({ success: true });
 }
