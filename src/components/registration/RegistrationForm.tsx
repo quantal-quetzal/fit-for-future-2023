@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import { Form } from "../ui/form";
 import { Allgemein } from "./Allgemein";
 import { Gebuehren } from "./Gebuehren";
+import { Intro } from "./Intro";
 import { Kampfrichter } from "./Kampfrichter";
 import { Teilnehmer } from "./Teilnehmer";
 import { Zusammenfassung } from "./Zusammenfassung";
@@ -59,6 +60,7 @@ export const RegistrationForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pb-10">
+        <Intro />
         <Allgemein form={form} />
         <Kampfrichter form={form} />
         <Gebuehren form={form} />

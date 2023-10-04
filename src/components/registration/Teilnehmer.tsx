@@ -15,7 +15,13 @@ import {
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
-import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../ui/form";
 import { Input } from "../ui/input";
 import {
   Select,
@@ -57,6 +63,10 @@ export const Teilnehmer = ({ form }: { form: MyForm }) => {
   return (
     <Card className="p-4 space-y-6">
       <h2 className="text-xl font-bold">Teilnehmer</h2>
+
+      <FormDescription className="sm:hidden">
+        Tabelle horizontal scrollen um Disziplinen einzutragen.
+      </FormDescription>
       <FormField
         control={form.control}
         name="teilnehmer"
