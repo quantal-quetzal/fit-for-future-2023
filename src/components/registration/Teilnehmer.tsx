@@ -42,6 +42,7 @@ import {
 } from "../ui/table";
 import { MyForm } from "./RegistrationForm";
 import {
+  anzahlDisziplinen,
   disziplinByKey,
   disziplinToMultiselectItem,
   disziplinenByJahrgang,
@@ -166,6 +167,12 @@ export const Teilnehmer = ({ form }: { form: MyForm }) => {
                                         return true;
                                       }
                                     );
+                                    if (
+                                      deduplicated.length >
+                                      anzahlDisziplinen(tn.geburtsjahr)
+                                    ) {
+                                      return;
+                                    }
 
                                     set(
                                       index,

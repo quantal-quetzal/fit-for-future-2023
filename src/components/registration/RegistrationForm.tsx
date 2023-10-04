@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { UseFormReturn, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
+import { Spinner } from "../general/Spinner";
 import { Button } from "../ui/button";
 import { Form } from "../ui/form";
 import { Allgemein } from "./Allgemein";
@@ -54,7 +55,7 @@ export const RegistrationForm = () => {
 
   const onSubmit = async (values: FormSchema) => {
     await submit(values);
-    // router.push("/success");
+    router.push("/success");
   };
 
   return (
@@ -71,7 +72,13 @@ export const RegistrationForm = () => {
           disabled={isLoading}
           className="bg-gradient-to-r from-purple-400 to-pink-600 w-full font-bold shadow-lg"
         >
-          Jetzt anmelden
+          {isLoading ? (
+            <div className="flex flex-row gap-4">
+              <Spinner /> Bitte warten
+            </div>
+          ) : (
+            "Jetzt anmelden"
+          )}
         </Button>
       </form>
     </Form>
